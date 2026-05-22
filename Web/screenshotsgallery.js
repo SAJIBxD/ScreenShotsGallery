@@ -42,7 +42,7 @@
         const link = document.createElement("link");
         link.id = PLUGIN_STYLE_ID;
         link.rel = "stylesheet";
-        link.href = getConfigurationResourceUrl("screenshotsgallery.css");
+        link.href = getConfigurationResourceUrl("screenshotsgallery.css") + "?v=" + Date.now();
         document.head.appendChild(link);
     }
 
@@ -200,8 +200,8 @@
         wrapper.setAttribute("data-sg-item-id", itemId);
 
         const title = document.createElement("h2");
-        title.className = "sg-gallery-title";
-        title.textContent = "ScreenShots:";
+        title.className = "sectionTitle sectionTitle-cards padded-right";
+        title.textContent = "ScreenShots";
 
         wrapper.appendChild(title);
 
