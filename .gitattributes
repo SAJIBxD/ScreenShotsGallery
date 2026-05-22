@@ -1,0 +1,24 @@
+# Auto detect text files and normalize
+* text=auto
+
+# Force LF line endings for common text files
+*.cs    text eol=lf
+*.csproj text eol=lf
+*.sln   text eol=lf
+*.md    text eol=lf
+*.js    text eol=lf
+*.css   text eol=lf
+
+# Binary files
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.ico binary
+
+# Don't diff generated binaries
+*.dll binary
+*.exe binary
+*.pdb binary
++ 

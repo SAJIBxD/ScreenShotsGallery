@@ -1,0 +1,45 @@
+## Ignore build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+*.sln.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# nuget
+*.nupkg
+# NuGet packages folder
+**/packages/
+
+# Logs
+*.log
+
+# Temporary files
+*~
+
+# VS Code
+.vscode/
+
+# Published output
+publish/
+
+# Tools and local artifacts
+tools/**/bin/
+tools/**/obj/
+
+# Local plugin install artifacts (not checked into repo)
+# (This path is outside repo, but keep a reference for users.)
+# ~/.local/share/jellyfin/plugins/
