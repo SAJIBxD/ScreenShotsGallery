@@ -14,9 +14,11 @@
 
 .sg-gallery-stack {
     width: 800px;
-    display: grid;
+    /* display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--sg-gap);
+    gap: var(--sg-gap); */
+    column-count: 2;
+    column-gap: 10px;
 }
 
 .sg-gallery-item {
@@ -26,6 +28,7 @@
     border: 1px solid var(--sg-card-border);
     box-shadow: var(--sg-shadow);
     overflow: hidden;
+    margin-bottom: 10px;
 }
 
 .sg-gallery-image {

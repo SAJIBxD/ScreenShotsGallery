@@ -198,7 +198,14 @@ public sealed class ScreenshotGalleryController : ControllerBase
     {
         return Directory
             .EnumerateFiles(imagesFolder)
-            .Where(path => SupportedExtensions.Contains(Path.GetExtension(path)))
+            .Where(path =>
+            {
+                var fileName = Path.GetFileName(path);
+
+                return SupportedExtensions.Contains(Path.GetExtension(path))
+                    && !fileName.StartsWith(".", StringComparison.Ordinal)
+                    && !fileName.StartsWith("._", StringComparison.Ordinal);
+            })
             .OrderBy(path => Path.GetFileName(path), NaturalFileNameComparer.Instance)
             .ToArray();
     }
