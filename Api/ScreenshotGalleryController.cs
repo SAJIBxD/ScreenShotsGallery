@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Entities.TV;
@@ -198,8 +199,113 @@ public sealed class ScreenshotGalleryController : ControllerBase
         return Directory
             .EnumerateFiles(imagesFolder)
             .Where(path => SupportedExtensions.Contains(Path.GetExtension(path)))
-            .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(path => Path.GetFileName(path), NaturalFileNameComparer.Instance)
             .ToArray();
+    }
+
+    private sealed class NaturalFileNameComparer : IComparer<string>
+    {
+        public static NaturalFileNameComparer Instance { get; } = new();
+
+        public int Compare(string? left, string? right)
+        {
+            if (ReferenceEquals(left, right))
+            {
+                return 0;
+            }
+
+            if (left is null)
+            {
+                return -1;
+            }
+
+            if (right is null)
+            {
+                return 1;
+            }
+
+            var leftParts = SplitNaturalParts(left);
+            var rightParts = SplitNaturalParts(right);
+            var partCount = Math.Min(leftParts.Count, rightParts.Count);
+
+            for (var index = 0; index < partCount; index++)
+            {
+                var leftPart = leftParts[index];
+                var rightPart = rightParts[index];
+
+                if (leftPart.IsNumber && rightPart.IsNumber)
+                {
+                    var numberCompare = leftPart.Number.CompareTo(rightPart.Number);
+                    if (numberCompare != 0)
+                    {
+                        return numberCompare;
+                    }
+
+                    var lengthCompare = leftPart.Text.Length.CompareTo(rightPart.Text.Length);
+                    if (lengthCompare != 0)
+                    {
+                        return lengthCompare;
+                    }
+
+                    continue;
+                }
+
+                if (leftPart.IsNumber != rightPart.IsNumber)
+                {
+                    return leftPart.IsNumber ? -1 : 1;
+                }
+
+                var textCompare = string.Compare(leftPart.Text, rightPart.Text, StringComparison.OrdinalIgnoreCase);
+                if (textCompare != 0)
+                {
+                    return textCompare;
+                }
+            }
+
+            return leftParts.Count.CompareTo(rightParts.Count);
+        }
+
+        private static List<NaturalPart> SplitNaturalParts(string value)
+        {
+            var parts = new List<NaturalPart>();
+            var builder = new StringBuilder();
+            var currentIsDigit = false;
+
+            for (var index = 0; index < value.Length; index++)
+            {
+                var ch = value[index];
+                var isDigit = char.IsDigit(ch);
+
+                if (index == 0)
+                {
+                    currentIsDigit = isDigit;
+                }
+                else if (isDigit != currentIsDigit)
+                {
+                    parts.Add(CreatePart(builder.ToString(), currentIsDigit));
+                    builder.Clear();
+                    currentIsDigit = isDigit;
+                }
+
+                builder.Append(ch);
+            }
+
+            if (builder.Length > 0)
+            {
+                parts.Add(CreatePart(builder.ToString(), currentIsDigit));
+            }
+
+            return parts;
+        }
+
+        private static NaturalPart CreatePart(string text, bool isNumber)
+        {
+            return isNumber && long.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out var number)
+                ? new NaturalPart(text, true, number)
+                : new NaturalPart(text, false, 0);
+        }
+
+        private readonly record struct NaturalPart(string Text, bool IsNumber, long Number);
     }
 
     private static bool TryResolveItemFolder(BaseItem item, out string folderPath, out string itemType)
