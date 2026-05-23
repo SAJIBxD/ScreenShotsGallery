@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ScreenShots Gallery</title>
-</head>
-<body>
-  <div id="configPage" data-role="page" class="page type-interior pluginConfigurationPage configPage" data-require="emby-input,emby-button">
-    <div data-role="content">
-      <div class="content-primary">
-        <h1>ScreenShots Gallery</h1>
-        <form class="configForm">
-          <div class="inputContainer">
-            <input is="emby-input" type="text" id="folderName" required label="Screenshot Folder" />
-            <div class="fieldDescription">Use a folder like <strong>images</strong> or <strong>extrafanarts</strong>. The plugin will scan this folder beside each movie, episode, or series folder.</div>
-          </div>
-          <div class="inputContainer">
-            <div id="status" class="fieldDescription"></div>
-          </div>
-          <br />
-          <div>
-            <button is="emby-button" type="submit" class="raised button-submit block"><span>Save</span></button>
-          </div>
-        </form>
-      </div>
+<div id="configPage" data-role="page" class="page type-interior pluginConfigurationPage configPage" data-require="emby-input,emby-button">
+  <div data-role="content">
+    <div class="content-primary">
+      <h1>ScreenShots Gallery</h1>
+      <form id="configForm" class="configForm" novalidate>
+        <div class="inputContainer">
+          <input is="emby-input" type="text" id="settingValue" label="Images folder name" value="images" />
+        </div>
+        <div class="inputContainer">
+          <div id="status" class="fieldDescription"></div>
+        </div>
+        <button
+          is="emby-button"
+          type="button"
+          id="saveButton"
+          class="raised button-submit block"
+          onclick="(async function(){var page=document.getElementById('configPage');var input=page&&page.querySelector('#settingValue');var status=page&&page.querySelector('#status');var button=page&&page.querySelector('#saveButton');var folderName=(input&&input.value?input.value:'images').trim()||'images';var pluginId='b6f3c1a2-9d4e-4a3b-8f2d-5e9c2a7f4b11';var apiClient=null;try{if(status){status.textContent='Saving...';}if(button){button.disabled=true;}apiClient=window.ApiClient||((window.parent&&window.parent!==window&&window.parent.ApiClient)||null)||((window.top&&window.top!==window&&window.top.ApiClient)||null);if(!apiClient&&window.ServerConnections&&typeof window.ServerConnections.currentApiClient==='function'){apiClient=window.ServerConnections.currentApiClient();}if(!apiClient&&window.parent&&window.parent!==window&&window.parent.ServerConnections&&typeof window.parent.ServerConnections.currentApiClient==='function'){apiClient=window.parent.ServerConnections.currentApiClient();}if(!apiClient&&window.top&&window.top!==window&&window.top.ServerConnections&&typeof window.top.ServerConnections.currentApiClient==='function'){apiClient=window.top.ServerConnections.currentApiClient();}if(!apiClient){throw new Error('ApiClient unavailable');}var config=await apiClient.getPluginConfiguration(pluginId);config.ImagesSubfolderName=folderName;config.ImagesSubfolderNames=[folderName];await apiClient.updatePluginConfiguration(pluginId,config);if(status){status.textContent='Settings updated';}if(window.Dashboard&&typeof window.Dashboard.alert==='function'){window.Dashboard.alert('Settings updated');}}catch(error){console.error(error);if(status){status.textContent='Save failed';}if(window.Dashboard&&typeof window.Dashboard.alert==='function'){window.Dashboard.alert('Unable to save plugin settings.');}}finally{if(button){button.disabled=false;}}})();return false;"
+        ><span>Save</span></button>
+      </form>
     </div>
   </div>
-  <script src="/web/plugins/ScreenShotsGallery/screenshotsgallery-settings.js"></script>
-</body>
-</html>
+</div>

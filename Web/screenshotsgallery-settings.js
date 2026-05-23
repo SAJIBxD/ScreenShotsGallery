@@ -193,14 +193,14 @@
           }
         }
         status.textContent = 'Saved';
+        if (window.Dashboard && typeof window.Dashboard.alert === 'function') {
+          window.Dashboard.alert('Settings saved successfully!');
+        }
       }, function (error) {
         console.error(error);
         status.textContent = 'Save failed';
         if (window.Dashboard && typeof window.Dashboard.alert === 'function') {
-          window.Dashboard.alert({
-            title: 'Save failed',
-            message: error && error.message ? error.message : 'Unable to save plugin settings.'
-          });
+          window.Dashboard.alert('Unable to save plugin settings.');
         }
       }).finally(function () {
         if (window.Dashboard && typeof window.Dashboard.hideLoadingMsg === 'function') {
