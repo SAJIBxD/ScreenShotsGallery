@@ -111,9 +111,7 @@
 
     function insertGallerySection(section, detailContainer) {
         const anchors = [
-            ".itemDetailPage .detailPagePrimaryContainer",
-            ".itemDetailPage .detailPagePrimaryContent",
-            ".itemDetailPage .detailPageOverview"
+            ".itemDetailPage .detailPageSecondaryContainer .detailPageContent"
         ];
 
         for (const selector of anchors) {
