@@ -110,10 +110,10 @@
     }
 
     function insertGallerySection(section, detailContainer) {
-        const anchorSelector = ".itemDetailPage #similarCollapsible.verticalSection.detailVerticalSection.verticalSection-extrabottompadding.emby-scroller-container";
+        const anchorSelector = ".itemDetailPage #similarCollapsible";
         const anchor = document.querySelector(anchorSelector);
 
-        if (isVisibleElement(anchor) && anchor.parentElement) {
+        if (anchor && anchor.parentElement) {
             anchor.parentElement.insertBefore(section, anchor);
             return `before ${anchorSelector}`;
         }
