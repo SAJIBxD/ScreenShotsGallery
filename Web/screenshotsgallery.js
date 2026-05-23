@@ -193,7 +193,7 @@
 
     function buildSection(itemId, galleryData) {
         const wrapper = document.createElement("section");
-        wrapper.className = "sg-gallery-wrapper";
+        wrapper.className = "verticalSection detailVerticalSection verticalSection-extrabottompadding emby-scroller-container";
         wrapper.setAttribute(PLUGIN_ROOT_ATTR, "true");
         wrapper.setAttribute("data-sg-item-id", itemId);
 
@@ -204,10 +204,7 @@
         wrapper.appendChild(title);
 
         if (!Array.isArray(galleryData.images) || galleryData.images.length === 0) {
-            const empty = document.createElement("p");
-            empty.className = "sg-gallery-empty";
-            empty.textContent = "No screenshots found in the local images folder.";
-            wrapper.appendChild(empty);
+            wrapper.classList.add("hide");
             return wrapper;
         }
 
