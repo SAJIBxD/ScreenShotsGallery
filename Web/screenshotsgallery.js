@@ -110,16 +110,12 @@
     }
 
     function insertGallerySection(section, detailContainer) {
-        const anchors = [
-            ".itemDetailPage .detailPageSecondaryContainer .detailPageContent"
-        ];
+        const anchorSelector = ".itemDetailPage #similarCollapsible.verticalSection.detailVerticalSection.verticalSection-extrabottompadding.emby-scroller-container";
+        const anchor = document.querySelector(anchorSelector);
 
-        for (const selector of anchors) {
-            const anchor = document.querySelector(selector);
-            if (isVisibleElement(anchor) && anchor.parentElement) {
-                anchor.appendChild(section);
-                return `inside ${selector}`;
-            }
+        if (isVisibleElement(anchor) && anchor.parentElement) {
+            anchor.parentElement.insertBefore(section, anchor);
+            return `before ${anchorSelector}`;
         }
 
         detailContainer.appendChild(section);
