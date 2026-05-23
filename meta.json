@@ -1,16 +1,16 @@
 {
   "guid": "b6f3c1a2-9d4e-4a3b-8f2d-5e9c2a7f4b11",
-  "name": "ScreenShots Gallery (Dev)",
+  "name": "ScreenShots Gallery",
   "overview": "Injects a vertical screenshot gallery into Jellyfin Movie, Episode, and Series detail pages by reading local images folders.",
   "description": "Displays stacked screenshots from a local images/ folder beside media files. Supports jpg, jpeg, png, and webp.",
-  "owner": "Local",
+  "owner": "SAJIBxD",
   "category": "General",
   "versions": [
     {
-      "version": "1.0.0.1",
+      "version": "1.0.0",
       "changelog": "Initial release",
-      "targetAbi": "10.10.0.0",
-      "sourceUrl": "https://example.invalid/ScreenShotsGallery"
+      "targetAbi": "10.10.0",
+      "sourceUrl": "https://github.com/SAJIBxD/ScreenShotsGallery/releases"
     }
   ]
 }

@@ -72,9 +72,11 @@ ensure_dir() {
 echo "Building plugin ($BUILD_CONFIG)..."
 dotnet build "$PROJECT_DIR" -c "$BUILD_CONFIG"
 
-# Find the built DLL. Prefer a Dev-suffixed assembly if present, otherwise pick any matching assembly.
+# Find the built DLL. Prefer public release name, then Dev-suffixed name, then any matching assembly.
 DLL=""
-if [[ -f "$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGalleryDev.dll" ]]; then
+if [[ -f "$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGallery.dll" ]]; then
+    DLL="$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGallery.dll"
+elif [[ -f "$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGalleryDev.dll" ]]; then
     DLL="$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGalleryDev.dll"
 else
     DLL=$(ls "$OUTPUT_DIR"/Jellyfin.Plugin.ScreenShotsGallery*.dll 2>/dev/null | head -n1 || true)

@@ -1,0 +1,132 @@
+name: Publish Jellyfin Plugin
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build plugin
+        run: dotnet build -c Release
+
+      - name: Package plugin and create manifest
+        id: package
+        shell: bash
+        env:
+          PLUGIN_GUID: b6f3c1a2-9d4e-4a3b-8f2d-5e9c2a7f4b11
+          PLUGIN_NAME: ScreenShots Gallery
+          PLUGIN_DESCRIPTION: Displays stacked screenshots from a local images/ folder beside media files. Supports jpg, jpeg, png, and webp.
+          PLUGIN_OVERVIEW: Injects a vertical screenshot gallery into Jellyfin Movie, Episode, and Series detail pages by reading local images folders.
+          PLUGIN_OWNER: SAJIBxD
+          PLUGIN_CATEGORY: General
+          TARGET_ABI: 10.10.0.0
+        run: |
+          set -euo pipefail
+
+          TAG_NAME="${GITHUB_REF_NAME}"
+          VERSION="${TAG_NAME#v}"
+
+          OUTPUT_DIR="bin/Release/net8.0"
+          DLL=""
+          if [[ -f "$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGallery.dll" ]]; then
+            DLL="$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGallery.dll"
+          elif [[ -f "$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGalleryDev.dll" ]]; then
+            DLL="$OUTPUT_DIR/Jellyfin.Plugin.ScreenShotsGalleryDev.dll"
+          else
+            DLL=$(ls "$OUTPUT_DIR"/Jellyfin.Plugin.ScreenShotsGallery*.dll 2>/dev/null | head -n1 || true)
+          fi
+
+          if [[ -z "$DLL" ]]; then
+            echo "Build output DLL not found"
+            exit 1
+          fi
+
+          BASE_NAME=$(basename "$DLL" .dll)
+          DEPS_JSON="$OUTPUT_DIR/${BASE_NAME}.deps.json"
+
+          STAGE_DIR="$RUNNER_TEMP/plugin-stage"
+          mkdir -p "$STAGE_DIR"
+          cp "$DLL" "$STAGE_DIR/"
+          if [[ -f "$DEPS_JSON" ]]; then
+            cp "$DEPS_JSON" "$STAGE_DIR/"
+          fi
+
+          ASSET_NAME="screenshotsgallery_${VERSION}.zip"
+          ASSET_PATH="$RUNNER_TEMP/$ASSET_NAME"
+          (
+            cd "$STAGE_DIR"
+            zip -r "$ASSET_PATH" .
+          )
+
+          CHECKSUM=$(md5sum "$ASSET_PATH" | awk '{print $1}')
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          SOURCE_URL="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG_NAME}/${ASSET_NAME}"
+
+          jq -n \
+            --arg guid "$PLUGIN_GUID" \
+            --arg name "$PLUGIN_NAME" \
+            --arg description "$PLUGIN_DESCRIPTION" \
+            --arg overview "$PLUGIN_OVERVIEW" \
+            --arg owner "$PLUGIN_OWNER" \
+            --arg category "$PLUGIN_CATEGORY" \
+            --arg version "$VERSION" \
+            --arg changelog "Release ${TAG_NAME}" \
+            --arg targetAbi "$TARGET_ABI" \
+            --arg sourceUrl "$SOURCE_URL" \
+            --arg checksum "$CHECKSUM" \
+            --arg timestamp "$TIMESTAMP" \
+            '[
+              {
+                guid: $guid,
+                name: $name,
+                description: $description,
+                overview: $overview,
+                owner: $owner,
+                category: $category,
+                versions: [
+                  {
+                    version: $version,
+                    changelog: $changelog,
+                    targetAbi: $targetAbi,
+                    sourceUrl: $sourceUrl,
+                    checksum: $checksum,
+                    timestamp: $timestamp
+                  }
+                ]
+              }
+            ]' > manifest.json
+
+          mkdir -p public
+          cp manifest.json public/manifest.json
+
+          {
+            echo "asset_name=$ASSET_NAME"
+            echo "asset_path=$ASSET_PATH"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.package.outputs.asset_path }}
+
+      - name: Publish manifest to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./public

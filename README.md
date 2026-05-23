@@ -74,6 +74,35 @@ bin/Release/net8.0/Jellyfin.Plugin.ScreenShotsGallery.dll
 - `GET /ScreenShotsGallery/api/{itemId}`
 - `GET /ScreenShotsGallery/api/{itemId}/image/{index}`
 
+## Publish On GitHub With manifest.json
+
+This repository now supports the normal Jellyfin custom repository flow.
+
+### 1) Create a GitHub release tag
+
+Use a tag like `v1.0.0.1` and publish a release in GitHub.
+
+The workflow in `.github/workflows/publish-jellyfin-plugin.yml` will:
+- build Release output,
+- create a plugin zip,
+- upload the zip to the release,
+- publish a `manifest.json` on the `gh-pages` branch.
+
+### 2) Add repository URL in Jellyfin
+
+In Jellyfin admin settings, add this custom repository URL:
+
+```text
+https://raw.githubusercontent.com/SAJIBxD/ScreenShotsGallery/gh-pages/manifest.json
+```
+
+After that, open the plugin catalog and install/update normally.
+
+### 3) Keep versions in sync
+
+- Release tag version and plugin version should match (for example `v1.0.0.1`).
+- `targetAbi` in manifest should match your Jellyfin server ABI target.
+
 ## Notes
 
 - The plugin only reads local filesystem folders reachable by Jellyfin process permissions.

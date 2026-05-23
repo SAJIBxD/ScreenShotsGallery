@@ -4,8 +4,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
-    <RootNamespace>ScreenShotsGalleryDev</RootNamespace>
-    <AssemblyName>Jellyfin.Plugin.ScreenShotsGalleryDev</AssemblyName>
+    <RootNamespace>ScreenShotsGallery</RootNamespace>
+    <AssemblyName>Jellyfin.Plugin.ScreenShotsGallery</AssemblyName>
+    <Version>1.0.0.1</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>

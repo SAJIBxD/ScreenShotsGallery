@@ -10,7 +10,7 @@ namespace ScreenShotsGallery;
 
 public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
 {
-    public const string PluginName = "ScreenShots Gallery (Dev)";
+    public const string PluginName = "ScreenShots Gallery";
     public static readonly Guid PluginGuid = new("b6f3c1a2-9d4e-4a3b-8f2d-5e9c2a7f4b11");
 
     public static Plugin? Instance { get; private set; }
@@ -32,21 +32,21 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
             new PluginPageInfo
             {
                 Name = "screenshotsgallery-settings.html",
-                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery-settings.html"
+                EmbeddedResourcePath = "ScreenShotsGallery.Web.screenshotsgallery-settings.html"
             },
             new PluginPageInfo
             {
                 Name = "screenshotsgallery-settings.js",
-                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery-settings.js"
+                EmbeddedResourcePath = "ScreenShotsGallery.Web.screenshotsgallery-settings.js"
             }
             , new PluginPageInfo
             {
                 Name = "screenshotsgallery.js",
-                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery.js"
+                EmbeddedResourcePath = "ScreenShotsGallery.Web.screenshotsgallery.js"
             }, new PluginPageInfo
             {
                 Name = "screenshotsgallery.css",
-                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery.css"
+                EmbeddedResourcePath = "ScreenShotsGallery.Web.screenshotsgallery.css"
             }
         };
     }
