@@ -31,23 +31,22 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
         {
             new PluginPageInfo
             {
-                Name = "screenshotsgallery.js",
-                EmbeddedResourcePath = $"{GetType().Namespace}.Web.screenshotsgallery.js"
+                Name = "screenshotsgallery-settings.html",
+                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery-settings.html"
             },
             new PluginPageInfo
             {
-                Name = "screenshotsgallery.css",
-                EmbeddedResourcePath = $"{GetType().Namespace}.Web.screenshotsgallery.css"
+                Name = "screenshotsgallery-settings.js",
+                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery-settings.js"
             }
-
             , new PluginPageInfo
             {
-                Name = "screenshotsgallery-settings.html",
-                EmbeddedResourcePath = $"{GetType().Namespace}.Web.screenshotsgallery-settings.html"
+                Name = "screenshotsgallery.js",
+                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery.js"
             }, new PluginPageInfo
             {
-                Name = "screenshotsgallery-settings.js",
-                EmbeddedResourcePath = $"{GetType().Namespace}.Web.screenshotsgallery-settings.js"
+                Name = "screenshotsgallery.css",
+                EmbeddedResourcePath = "ScreenShotsGalleryDev.Web.screenshotsgallery.css"
             }
         };
     }

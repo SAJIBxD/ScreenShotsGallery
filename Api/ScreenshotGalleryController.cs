@@ -54,9 +54,19 @@ public sealed class ScreenshotGalleryController : ControllerBase
 
         try
         {
-            // update and save
-            Plugin.Instance.Configuration.ImagesSubfolderNames = cfg.ImagesSubfolderNames ?? new System.Collections.Generic.List<string> { cfg.ImagesSubfolderName ?? "images" };
-            Plugin.Instance.Configuration.ImagesSubfolderName = string.IsNullOrWhiteSpace(cfg.ImagesSubfolderName) ? (Plugin.Instance.Configuration.ImagesSubfolderNames.Count > 0 ? Plugin.Instance.Configuration.ImagesSubfolderNames[0] : "images") : cfg.ImagesSubfolderName;
+            var folderName = NormalizeFolderName(cfg.ImagesSubfolderName);
+            if (string.IsNullOrWhiteSpace(folderName) && cfg.ImagesSubfolderNames is not null && cfg.ImagesSubfolderNames.Count > 0)
+            {
+                folderName = NormalizeFolderName(cfg.ImagesSubfolderNames[0]);
+            }
+
+            if (string.IsNullOrWhiteSpace(folderName))
+            {
+                folderName = "images";
+            }
+
+            Plugin.Instance.Configuration.ImagesSubfolderName = folderName;
+            Plugin.Instance.Configuration.ImagesSubfolderNames = new System.Collections.Generic.List<string> { folderName };
             Plugin.Instance.SaveConfiguration(Plugin.Instance.Configuration);
             return Ok(Plugin.Instance.Configuration);
         }
@@ -239,6 +249,11 @@ public sealed class ScreenshotGalleryController : ControllerBase
     {
         var configured = Plugin.Instance?.Configuration?.ImagesSubfolderName;
         return string.IsNullOrWhiteSpace(configured) ? "images" : configured.Trim();
+    }
+
+    private static string NormalizeFolderName(string? folderName)
+    {
+        return string.IsNullOrWhiteSpace(folderName) ? string.Empty : folderName.Trim();
     }
 
     private static bool TryFindImagesFolder(string itemFolder, out string found)

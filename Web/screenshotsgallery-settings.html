@@ -1,18 +1,115 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ScreenShots Gallery - Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ScreenShots Gallery</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --sg-bg: #101418;
+      --sg-panel: #151b22;
+      --sg-border: #2b3540;
+      --sg-text: #e6edf3;
+      --sg-muted: #93a4b5;
+      --sg-accent: #2e7d32;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: linear-gradient(180deg, #101418 0%, #0b0f13 100%);
+      color: var(--sg-text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .sg-settings {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px;
+      border: 1px solid var(--sg-border);
+      border-radius: 14px;
+      background: rgba(21, 27, 34, 0.92);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--sg-muted);
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin: 0 0 8px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid var(--sg-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #0f1419;
+      color: var(--sg-text);
+      font-size: 1rem;
+    }
+
+    .row {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: var(--sg-accent);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #status {
+      color: var(--sg-muted);
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 0.92rem;
+      color: var(--sg-muted);
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <h2>ScreenShots Gallery Settings</h2>
-    <label>Images subfolder names (comma-separated):</label>
-    <input id="folders" style="width:80%" />
-    <div style="margin-top:12px">
-      <button id="save">Save</button>
-      <span id="status" style="margin-left:8px"></span>
+  <div id="configPage" data-role="page" class="page type-interior pluginConfigurationPage configPage" data-require="emby-input,emby-button">
+    <div class="sg-settings">
+      <h1>ScreenShots Gallery Settings</h1>
+      <p>Choose the folder name Jellyfin should scan beside your media files. Use a folder like <strong>images</strong> or <strong>extrafanarts</strong>.</p>
+      <form class="configForm">
+        <label for="folderName">Screenshot folder name</label>
+        <input id="folderName" placeholder="images" />
+        <div class="row">
+          <button is="emby-button" type="submit" class="raised button-submit">Save</button>
+          <span id="status"></span>
+        </div>
+        <div class="hint">The plugin will look for this folder next to each movie, episode, or series folder.</div>
+      </form>
     </div>
   </div>
   <script src="/web/plugins/ScreenShotsGallery/screenshotsgallery-settings.js"></script>
