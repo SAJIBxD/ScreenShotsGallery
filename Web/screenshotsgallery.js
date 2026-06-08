@@ -16,10 +16,6 @@
         ".detailPageContent"
     ];
 
-    function apiClient() {
-        return window.ApiClient || null;
-    }
-
     function getServerUrl(path) {
         const normalizedPath = String(path || "").replace(/^\/+/, "");
 
@@ -48,10 +44,6 @@
 
     function cleanupInjected() {
         document.querySelectorAll(`[${PLUGIN_ROOT_ATTR}='true']`).forEach((el) => el.remove());
-        const overlay = document.getElementById("sg-lightbox-overlay");
-        if (overlay) {
-            overlay.remove();
-        }
     }
 
     function extractGuidCandidate(value) {
@@ -100,15 +92,6 @@
         return null;
     }
 
-    function isVisibleElement(el) {
-        if (!el || !(el instanceof Element)) {
-            return false;
-        }
-
-        const rect = el.getBoundingClientRect();
-        return rect.width > 0 && rect.height > 0;
-    }
-
     function insertGallerySection(section, detailContainer) {
         const anchorSelector = ".itemDetailPage #similarCollapsible";
         const anchor = document.querySelector(anchorSelector);
@@ -137,9 +120,6 @@
             : [];
 
         return {
-            itemId: payload.itemId || payload.ItemId || "",
-            itemType: payload.itemType || payload.ItemType || "",
-            imagesFolder: payload.imagesFolder || payload.ImagesFolder || "",
             images
         };
     }
@@ -148,13 +128,8 @@
         const path = `${API_ROOT}/${itemId}`;
         const url = getServerUrl(path);
 
-        console.info('[ScreenShotsGallery] fetchGallery', { itemId, path, url });
-
-        console.info('[ScreenShotsGallery] direct fetch', url);
         const response = await fetch(url, { credentials: "same-origin" });
-        console.info('[ScreenShotsGallery] direct fetch response', { status: response.status, ok: response.ok, url });
         if (!response.ok) {
-            console.warn("[ScreenShotsGallery] gallery request failed", response.status, url, response);
             return null;
         }
         const json = await response.json();
@@ -243,8 +218,7 @@
 
             const section = buildSection(itemId, gallery);
             try {
-                const placement = insertGallerySection(section, detailContainer);
-                console.info('[ScreenShotsGallery] append complete', { placement, detailClass: detailContainer && detailContainer.className });
+                insertGallerySection(section, detailContainer);
             } catch (e) {
                 console.error('[ScreenShotsGallery] failed to append gallery section', e, detailContainer);
             }

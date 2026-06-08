@@ -1,22 +1,12 @@
 :root {
-    --sg-title-color: #2e7d32;
     --sg-card-bg: rgba(255, 255, 255, 0.03);
     --sg-card-border: rgba(255, 255, 255, 0.08);
     --sg-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
-    --sg-gap: 12px;
-}
-
-.sg-gallery-empty {
-    margin: 0;
-    color: rgba(255, 255, 255, 0.72);
-    font-size: 0.98rem;
 }
 
 .sg-gallery-stack {
-    width: 800px;
-    /* display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sg-gap); */
+    width: 100%;
+    max-width: 800px;
     column-count: 2;
     column-gap: 10px;
 }
@@ -41,13 +31,8 @@
 }
 
 @media (max-width: 900px) {
-    .sg-gallery-wrapper {
-        margin-top: 20px;
-        padding: 14px 0;
-    }
-
     .sg-gallery-stack {
         max-width: 100%;
-        gap: 10px;
+        column-count: 1;
     }
 }
