@@ -93,16 +93,9 @@
     }
 
     function insertGallerySection(section, detailContainer) {
-        const anchorSelector = ".itemDetailPage #similarCollapsible";
-        const anchor = document.querySelector(anchorSelector);
-
-        if (anchor && anchor.parentElement) {
-            anchor.parentElement.insertBefore(section, anchor);
-            return `before ${anchorSelector}`;
-        }
-
-        detailContainer.appendChild(section);
-        return "append detailContainer";
+        const anchor = detailContainer.querySelector("#similarCollapsible");
+        detailContainer.insertBefore(section, anchor);
+        return anchor ? "before #similarCollapsible" : "append detailContainer";
     }
 
     function normalizeGalleryPayload(payload) {
