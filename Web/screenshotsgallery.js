@@ -161,32 +161,6 @@
         return normalizeGalleryPayload(json);
     }
 
-    function createLightbox() {
-        const overlay = document.createElement("div");
-        overlay.id = "sg-lightbox-overlay";
-        overlay.className = "sg-lightbox-overlay";
-        overlay.setAttribute(PLUGIN_ROOT_ATTR, "true");
-
-        const image = document.createElement("img");
-        image.className = "sg-lightbox-image";
-        overlay.appendChild(image);
-
-        overlay.addEventListener("click", () => {
-            overlay.classList.remove("open");
-            setTimeout(() => overlay.remove(), 150);
-        });
-
-        document.body.appendChild(overlay);
-
-        return {
-            open(src, altText) {
-                image.src = src;
-                image.alt = altText;
-                requestAnimationFrame(() => overlay.classList.add("open"));
-            }
-        };
-    }
-
     function buildSection(itemId, galleryData) {
         const wrapper = document.createElement("section");
         wrapper.className = "verticalSection detailVerticalSection verticalSection-extrabottompadding emby-scroller-container";
@@ -206,7 +180,6 @@
 
         const stack = document.createElement("div");
         stack.className = "sg-gallery-stack";
-        const lightbox = createLightbox();
 
         for (const imageDto of galleryData.images) {
             if (!imageDto || !imageDto.url) {
@@ -214,9 +187,6 @@
             }
 
             const imageUrl = getServerUrl(imageDto.url || `${API_ROOT}/${itemId}/image/${imageDto.index}`);
-            const item = document.createElement("figure");
-            item.className = "sg-gallery-item";
-
             const img = document.createElement("img");
             img.className = "sg-gallery-image";
             img.loading = "lazy";
@@ -224,10 +194,7 @@
             img.alt = imageDto.fileName || "Screenshot";
             img.src = imageUrl;
 
-            img.addEventListener("click", () => lightbox.open(imageUrl, img.alt));
-
-            item.appendChild(img);
-            stack.appendChild(item);
+            stack.appendChild(img);
         }
 
         wrapper.appendChild(stack);
