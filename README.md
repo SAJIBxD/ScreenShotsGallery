@@ -1,109 +1,38 @@
-# ScreenShots Gallery Plugin (Jellyfin)
+# ScreenShots Gallery
 
-A Jellyfin server plugin that injects a vertically stacked screenshot section into Movie, Episode, and Series detail pages.
+A tiny Jellyfin plugin that shows a vertical gallery of screenshots on media detail pages.
 
-## Features
+## Jellyfin plugin installation (recommended) 
 
-- Scans `images/` subfolder next to media files or series folder.
-- Supports `.jpg`, `.jpeg`, `.png`, `.webp`.
-- Injects a **ScreenShots:** section with responsive vertical layout.
-- SPA-safe frontend logic using `MutationObserver`, history hooks, and retry rendering.
-- Optional click-to-expand lightbox.
+1. In Jellyfin Admin, go to **Plugins → Catalog → Add Repository**.
+2. Add this manifest URL: `https://raw.githubusercontent.com/SAJIBxD/ScreenShotsGallery/gh-pages/manifest.json`
+3. After adding this, open **Plugins → Catalog**, find **ScreenShots Gallery**, and click **Install**.
+4. Restart Jellyfin. Open any movie/episode/series page that has an `images/` folder to see the gallery.
 
-## Media Folder Example
+## How to prepare screenshots
 
-```text
-Movie Folder/
-├── movie.mkv
-└── images/
-    ├── 1.jpg
-    ├── 2.jpg
-    └── 3.webp
+Place an `images/` folder next to your media file or inside a series folder. Put image files there (any names). Example:
+
+```
+My Movie/
+├─ movie.mp4
+└─ images/
+    ├─ 1.jpg
+    ├─ cover.png
+    └─ scene3.webp
 ```
 
-## Build
+The plugin will automatically show those images on the item's page.
 
-```bash
-dotnet restore
-dotnet build -c Release
-```
+## Quick troubleshooting
 
-## One-Command Install (macOS/Linux)
+- No images visible: ensure the Jellyfin server can read the `images/` folder (permissions).
+- Plugin not in catalog: double-check the repository URL or install the ZIP manually from Releases.
+- Check server logs under Admin → Logs for load or runtime errors.
 
-```bash
-chmod +x ./install-to-jellyfin.sh
-./install-to-jellyfin.sh
-```
+## Manual install
 
-Optional debugging symbols:
+1. Download the latest release ZIP from GitHub Releases.
+2. Stop Jellyfin, extract the ZIP into the plugins folder (e.g. `/var/lib/jellyfin/plugins/ScreenShotsGallery`), then start Jellyfin.
 
-```bash
-./install-to-jellyfin.sh --with-symbols
-```
-
-Optional custom plugins root:
-
-```bash
-JELLYFIN_PLUGINS_DIR=/custom/plugins ./install-to-jellyfin.sh
-```
-
-Output DLL path:
-
-```text
-bin/Release/net8.0/Jellyfin.Plugin.ScreenShotsGallery.dll
-```
-
-## Install
-
-1. Stop Jellyfin server.
-2. Create plugin folder:
-
-```text
-<jellyfin-data>/plugins/ScreenShotsGallery
-```
-
-3. Copy:
-- `Jellyfin.Plugin.ScreenShotsGallery.dll`
-- any dependency DLLs from the same output folder
-
-4. Start Jellyfin server.
-5. Open server logs and confirm plugin load.
-
-## API Endpoints
-
-- `GET /ScreenShotsGallery/api/{itemId}`
-- `GET /ScreenShotsGallery/api/{itemId}/image/{index}`
-
-## Publish On GitHub With manifest.json
-
-This repository now supports the normal Jellyfin custom repository flow.
-
-### 1) Create a GitHub release tag
-
-Use a tag like `v1.0.0.1` and publish a release in GitHub.
-
-The workflow in `.github/workflows/publish-jellyfin-plugin.yml` will:
-- build Release output,
-- create a plugin zip,
-- upload the zip to the release,
-- publish a `manifest.json` on the `gh-pages` branch.
-
-### 2) Add repository URL in Jellyfin
-
-In Jellyfin admin settings, add this custom repository URL:
-
-```text
-https://raw.githubusercontent.com/SAJIBxD/ScreenShotsGallery/gh-pages/manifest.json
-```
-
-After that, open the plugin catalog and install/update normally.
-
-### 3) Keep versions in sync
-
-- Release tag version and plugin version should match (for example `v1.0.0.1`).
-- `targetAbi` in manifest should match your Jellyfin server ABI target.
-
-## Notes
-
-- The plugin only reads local filesystem folders reachable by Jellyfin process permissions.
-- If no `images/` folder exists, the section shows a graceful empty message.
+That's it — enjoy the gallery!
