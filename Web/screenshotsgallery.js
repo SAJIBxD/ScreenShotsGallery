@@ -83,6 +83,16 @@
 
     function resolveDetailContainer() {
         for (const selector of detailContainerSelectors) {
+            const candidates = document.querySelectorAll(selector);
+
+            for (const candidate of candidates) {
+                if (isVisibleElement(candidate)) {
+                    return candidate;
+                }
+            }
+        }
+
+        for (const selector of detailContainerSelectors) {
             const candidate = document.querySelector(selector);
             if (candidate) {
                 return candidate;
@@ -90,6 +100,15 @@
         }
 
         return null;
+    }
+
+    function isVisibleElement(el) {
+        if (!el || !(el instanceof Element)) {
+            return false;
+        }
+
+        const rect = el.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
     }
 
     function insertGallerySection(section, detailContainer) {
