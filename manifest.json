@@ -8,12 +8,12 @@
     "category": "General",
     "versions": [
       {
-        "version": "1.0.0.0",
-        "changelog": "Release v1.0.0.0",
+        "version": "1.0.1.0",
+        "changelog": "Release v1.0.1.0",
         "targetAbi": "10.10.0.0",
-        "sourceUrl": "https://github.com/SAJIBxD/ScreenShotsGallery/releases/download/v1.0.0.0/screenshotsgallery_1.0.0.0.zip",
-        "checksum": "7961616f6a3efe5f1f777c829149dc92",
-        "timestamp": "2026-05-23T11:01:44Z"
+        "sourceUrl": "https://github.com/SAJIBxD/ScreenShotsGallery/releases/download/v1.0.1.0/screenshotsgallery_1.0.1.0.zip",
+        "checksum": "bdc8163f2e0a693566eb6bd31595f486",
+        "timestamp": "2026-06-08T18:46:58Z"
       }
     ]
   }
